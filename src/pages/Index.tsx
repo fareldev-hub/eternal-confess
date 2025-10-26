@@ -1,22 +1,50 @@
-import { useState, useEffect } from "react";
-import { FloatingHearts } from "@/components/FloatingHearts";
+import { useState, useRef, useEffect } from "react";
 import { StoryCard } from "@/components/StoryCard";
 import { StoryButton } from "@/components/StoryButton";
 import { LoveSlider } from "@/components/LoveSlider";
 import { AnimatedText } from "@/components/AnimatedText";
 import { TypingText } from "@/components/TypingText";
-import { Heart } from "lucide-react";
+import { Heart, Send } from "lucide-react";
 import bgHero from "@/assets/bg-hero.jpg";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [lovePercentage, setLovePercentage] = useState(0);
-  const [finalLove, setFinalLove] = useState(50);
   const [musicStarted, setMusicStarted] = useState(false);
   const [pageTransition, setPageTransition] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
+  // Track user answers
+  const [userAnswers, setUserAnswers] = useState({
+    kabar: "",
+    pentingAnswer: "",
+    sayangAnswer: "",
+    lovePercentage: 0,
+  });
 
-  const nextPage = () => {
-    if (currentPage < 11) {
+  
+  // Form data for final page
+  const [formData, setFormData] = useState({
+    name: "",
+    message: "",
+  });
+
+  const nextPage = (answer?: string) => {
+    // Track answers based on current page
+    if (currentPage === 1 && answer) {
+      setUserAnswers(prev => ({ ...prev, kabar: answer }));
+    } else if (currentPage === 3 && answer) {
+      setUserAnswers(prev => ({ ...prev, pentingAnswer: answer }));
+    } else if (currentPage === 5 && answer) {
+      setUserAnswers(prev => ({ ...prev, sayangAnswer: answer }));
+    } else if (currentPage === 6) {
+      setUserAnswers(prev => ({ ...prev, lovePercentage }));
+    }
+    
+    if (currentPage < 12) {
       setPageTransition(true);
       setTimeout(() => {
         setCurrentPage((prev) => prev + 1);
@@ -30,18 +58,49 @@ const Index = () => {
     setTimeout(() => {
       setCurrentPage(0);
       setLovePercentage(0);
-      setFinalLove(50);
       setMusicStarted(false);
+      setUserAnswers({
+        kabar: "",
+        pentingAnswer: "",
+        sayangAnswer: "",
+        lovePercentage: 0,
+      });
+      setFormData({ name: "", message: "" });
       setPageTransition(false);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     }, 300);
   };
 
   const startMusic = () => {
-    if (!musicStarted) {
+    if (!musicStarted && audioRef.current) {
       setMusicStarted(true);
-      // Music would play here if audio file is available
+      audioRef.current.play().catch(() => console.log("Autoplay blocked"));
     }
     nextPage();
+  };
+
+  const handleSendToWhatsApp = () => {
+    if (!formData.name.trim() || !formData.message.trim()) {
+      toast.error("Mohon isi nama dan pesan kamu");
+      return;
+    }
+
+    const message = `*Foryou Story Response* 💕\n\n` +
+      `👤 *Nama:* ${formData.name}\n` +
+      `📝 *Pesan:* ${formData.message}\n\n` +
+      `*Jawaban:*\n` +
+      `🎭 Kabar: ${userAnswers.kabar}\n` +
+      `⭐ Aku penting?: ${userAnswers.pentingAnswer}\n` +
+      `💖 Kamu sayang aku?: ${userAnswers.sayangAnswer}\n` +
+      `💯 Seberapa sayang: ${userAnswers.lovePercentage}%`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    toast.success("Terima kasih! Pesan kamu akan dikirim ke WhatsApp");
   };
 
   const loveTexts = [
@@ -60,6 +119,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Audio Player */}
+      <audio ref={audioRef} loop>
+        <source src="/assets/musik.mp3" type="audio/mpeg" />
+      </audio>
+
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
@@ -70,9 +134,14 @@ const Index = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/60 via-pink-900/50 to-black/70" />
       
-      <FloatingHearts />
+      {/* Watermark */}
+      <div className="fixed bottom-4 left-0 right-0 z-50 text-center">
+        <p className="text-white/60 text-sm">
+          Dikembangkan oleh <span className="font-semibold text-pink-300/80">Farel Alfareza</span>
+        </p>
+      </div>
       
-      <div className={`relative z-10 min-h-screen flex items-center justify-center p-4 transition-opacity duration-300 ${pageTransition ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`relative z-10 min-h-screen flex items-center justify-center p-4 pb-16 transition-opacity duration-300 ${pageTransition ? 'opacity-0' : 'opacity-100'}`}>
         {/* Page 1 */}
         {currentPage === 0 && (
           <StoryCard>
@@ -108,8 +177,8 @@ const Index = () => {
                 <TypingText text="Kabar kamu gimana hari ini??" delay={1000} speed={60} />
               </p>
               <div className="flex gap-4 justify-center pt-4">
-                <StoryButton onClick={nextPage}>Baik</StoryButton>
-                <StoryButton variant="secondary" onClick={nextPage}>Buruk</StoryButton>
+                <StoryButton onClick={() => nextPage("Baik")}>Baik</StoryButton>
+                <StoryButton variant="secondary" onClick={() => nextPage("Buruk")}>Buruk</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -149,8 +218,8 @@ const Index = () => {
                 <TypingText text="Aku ini penting gak??" delay={2200} speed={60} />
               </p>
               <div className="flex gap-4 justify-center pt-4">
-                <StoryButton onClick={nextPage}>Iyaa</StoryButton>
-                <StoryButton variant="secondary" onClick={nextPage}>Tidak</StoryButton>
+                <StoryButton onClick={() => nextPage("Iyaa")}>Iyaa</StoryButton>
+                <StoryButton variant="secondary" onClick={() => nextPage("Tidak")}>Tidak</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -184,8 +253,8 @@ const Index = () => {
                 <TypingText text="Kamu sayang sama aku kan??" delay={1000} speed={60} />
               </p>
               <div className="flex gap-4 justify-center pt-4">
-                <StoryButton onClick={nextPage}>Iyaa</StoryButton>
-                <StoryButton variant="secondary" onClick={nextPage}>Tidak</StoryButton>
+                <StoryButton onClick={() => nextPage("Iyaa")}>Iyaa</StoryButton>
+                <StoryButton variant="secondary" onClick={() => nextPage("Tidak")}>Tidak</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -277,23 +346,85 @@ const Index = () => {
           </StoryCard>
         )}
 
-        {/* Page 12 - Final */}
+        {/* Page 12 - Thank You & Redirect */}
         {currentPage === 11 && (
           <StoryCard>
             <div className="text-center space-y-8">
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-2xl">
-                <TypingText text="Terakhir Nih 💘" speed={70} />
+                <TypingText text="Terima Kasih 💕" speed={70} />
               </h1>
               <p className="text-xl text-white/90">
-                <TypingText text="Seberapa besar rasa sayang kamu buat aku? 😳" delay={1200} speed={60} />
+                <TypingText text="Terima kasih sudah menjawab semuanya dengan jujur" delay={1200} speed={50} />
               </p>
-              <LoveSlider
-                value={finalLove}
-                onChange={setFinalLove}
-                label="Sayang"
-              />
+              <p className="text-lg text-white/80">
+                <TypingText text="Sekarang, ada yang mau kamu sampaikan?" delay={3500} speed={50} />
+              </p>
               <div className="flex justify-center pt-4">
-                <StoryButton onClick={restart}>Ulang Lagi 🔁</StoryButton>
+                <StoryButton onClick={nextPage}>Lanjut</StoryButton>
+              </div>
+            </div>
+          </StoryCard>
+        )}
+
+        {/* Page 13 - Final Form */}
+        {currentPage === 12 && (
+          <StoryCard className="max-w-lg">
+            <div className="space-y-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-2xl text-center">
+                Kirim Pesan 💌
+              </h1>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-white/90 text-sm font-medium block mb-2">
+                    Nama Kamu
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Masukkan nama kamu..."
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/50"
+                    maxLength={100}
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white/90 text-sm font-medium block mb-2">
+                    Pesan Kamu
+                  </label>
+                  <Textarea
+                    placeholder="Tulis pesan kamu di sini..."
+                    value={formData.message}
+                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                    className="bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/50 min-h-[120px] resize-none"
+                    maxLength={500}
+                  />
+                </div>
+
+                <div className="bg-white/10 rounded-xl p-4 space-y-2 text-sm text-white/80">
+                  <p className="font-semibold text-pink-300">Ringkasan Jawaban:</p>
+                  <p>📋 Kabar: <span className="text-white">{userAnswers.kabar}</span></p>
+                  <p>⭐ Aku penting?: <span className="text-white">{userAnswers.pentingAnswer}</span></p>
+                  <p>💖 Kamu sayang?: <span className="text-white">{userAnswers.sayangAnswer}</span></p>
+                  <p>💯 Seberapa sayang: <span className="text-white">{userAnswers.lovePercentage}%</span></p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <StoryButton 
+                  onClick={handleSendToWhatsApp}
+                  className="flex-1 flex items-center justify-center gap-2"
+                >
+                  <Send className="w-5 h-5" />
+                  Kirim ke WhatsApp
+                </StoryButton>
+                <StoryButton 
+                  variant="secondary"
+                  onClick={restart}
+                >
+                  Ulang
+                </StoryButton>
               </div>
             </div>
           </StoryCard>
