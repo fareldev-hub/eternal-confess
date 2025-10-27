@@ -15,6 +15,7 @@ const Index = () => {
   const [lovePercentage, setLovePercentage] = useState(0);
   const [musicStarted, setMusicStarted] = useState(false);
   const [pageTransition, setPageTransition] = useState(false);
+  const [animationComplete, setAnimationComplete] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
   // Track user answers
@@ -49,8 +50,21 @@ const Index = () => {
       setTimeout(() => {
         setCurrentPage((prev) => prev + 1);
         setPageTransition(false);
+        setAnimationComplete(false); // Reset animation state
       }, 300);
     }
+  };
+
+  const handleNoClick = (message: string) => {
+    toast.error(message, {
+      duration: 3000,
+      style: {
+        background: 'rgba(255, 77, 141, 0.1)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 77, 141, 0.3)',
+        color: 'white',
+      },
+    });
   };
 
   const restart = () => {
@@ -157,7 +171,7 @@ const Index = () => {
                 <StoryButton onClick={startMusic}>Lanjut</StoryButton>
                 <StoryButton 
                   variant="secondary" 
-                  onClick={() => alert("Yakin gak mau? 😢")}
+                  onClick={() => handleNoClick("Yakin gak mau? Ayolah, coba lagi yaa 🥺")}
                 >
                   Tidak
                 </StoryButton>
@@ -178,7 +192,10 @@ const Index = () => {
               </p>
               <div className="flex gap-4 justify-center pt-4">
                 <StoryButton onClick={() => nextPage("Baik")}>Baik</StoryButton>
-                <StoryButton variant="secondary" onClick={() => nextPage("Buruk")}>Buruk</StoryButton>
+                <StoryButton variant="secondary" onClick={() => {
+                  handleNoClick("Gapapa kok, semoga hari kamu segera membaik 💪");
+                  nextPage("Buruk");
+                }}>Buruk</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -219,7 +236,10 @@ const Index = () => {
               </p>
               <div className="flex gap-4 justify-center pt-4">
                 <StoryButton onClick={() => nextPage("Iyaa")}>Iyaa</StoryButton>
-                <StoryButton variant="secondary" onClick={() => nextPage("Tidak")}>Tidak</StoryButton>
+                <StoryButton variant="secondary" onClick={() => {
+                  handleNoClick("Bohong deh, pasti penting kok 😊");
+                  nextPage("Tidak");
+                }}>Tidak</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -254,7 +274,10 @@ const Index = () => {
               </p>
               <div className="flex gap-4 justify-center pt-4">
                 <StoryButton onClick={() => nextPage("Iyaa")}>Iyaa</StoryButton>
-                <StoryButton variant="secondary" onClick={() => nextPage("Tidak")}>Tidak</StoryButton>
+                <StoryButton variant="secondary" onClick={() => {
+                  handleNoClick("Masa sih? Coba pikir lagi deh 🤔💕");
+                  nextPage("Tidak");
+                }}>Tidak</StoryButton>
               </div>
             </div>
           </StoryCard>
@@ -338,10 +361,17 @@ const Index = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-2xl mb-8">
                 <TypingText text="Ungkapan Hati 💖" speed={70} />
               </h1>
-              <AnimatedText texts={loveTexts} typingSpeed={50} delay={2000} />
-              <div className="flex justify-center pt-8">
-                <StoryButton onClick={nextPage}>Lanjut</StoryButton>
-              </div>
+              <AnimatedText 
+                texts={loveTexts} 
+                typingSpeed={50} 
+                delay={2000}
+                onComplete={() => setAnimationComplete(true)}
+              />
+              {animationComplete && (
+                <div className="flex justify-center pt-8 animate-fade-in">
+                  <StoryButton onClick={nextPage}>Lanjut</StoryButton>
+                </div>
+              )}
             </div>
           </StoryCard>
         )}
