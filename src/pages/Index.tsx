@@ -8,6 +8,7 @@ import { Heart, Send } from "lucide-react";
 import bgHero from "@/assets/bg-hero.jpg";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -25,11 +26,27 @@ const Index = () => {
     lovePercentage: 0,
   });
 
-  
   // Form data for final page
   const [formData, setFormData] = useState({
     message: "",
   });
+
+  // 🔊 Jalankan musik hanya saat tombol “Lanjut” pertama diklik
+  const startMusic = () => {
+    const audio = audioRef.current;
+    if (audio && !musicStarted) {
+      audio.muted = false;
+      audio.volume = 1.0;
+      audio
+        .play()
+        .then(() => {
+          console.log("Audio started 🎵");
+          setMusicStarted(true);
+        })
+        .catch((err) => console.warn("Gagal memutar audio:", err));
+    }
+    nextPage();
+  };
 
   const nextPage = (answer?: string) => {
     // Track answers based on current page
@@ -86,14 +103,6 @@ const Index = () => {
     }, 300);
   };
 
-  const startMusic = () => {
-    if (!musicStarted && audioRef.current) {
-      setMusicStarted(true);
-      audioRef.current.play().catch(() => console.log("Autoplay blocked"));
-    }
-    nextPage();
-  };
-
   const handleSendToWhatsApp = () => {
     if (!formData.message.trim()) {
       toast.error("Mohon isi pesan kamu");
@@ -130,10 +139,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Audio Player */}
-      <audio ref={audioRef} loop>
-        <source src="/assets/musik.mp3" type="audio/mpeg" />
-      </audio>
+      {/* 🎵 Audio Player */}
+      <audio ref={audioRef} src="https://files.catbox.moe/r34k5f.mp3" loop preload="auto" />
 
       {/* Background Image with Overlay */}
       <div 
