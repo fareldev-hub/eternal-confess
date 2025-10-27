@@ -29,7 +29,6 @@ const Index = () => {
   
   // Form data for final page
   const [formData, setFormData] = useState({
-    name: "",
     message: "",
   });
 
@@ -79,7 +78,7 @@ const Index = () => {
         sayangAnswer: "",
         lovePercentage: 0,
       });
-      setFormData({ name: "", message: "" });
+      setFormData({ message: "" });
       setPageTransition(false);
       if (audioRef.current) {
         audioRef.current.pause();
@@ -97,13 +96,12 @@ const Index = () => {
   };
 
   const handleSendToWhatsApp = () => {
-    if (!formData.name.trim() || !formData.message.trim()) {
-      toast.error("Mohon isi nama dan pesan kamu");
+    if (!formData.message.trim()) {
+      toast.error("Mohon isi pesan kamu");
       return;
     }
 
     const message = `*Foryou Story Response* 💕\n\n` +
-      `👤 *Nama:* ${formData.name}\n` +
       `📝 *Pesan:* ${formData.message}\n\n` +
       `*Jawaban:*\n` +
       `🎭 Kabar: ${userAnswers.kabar}\n` +
@@ -407,20 +405,6 @@ const Index = () => {
               <div className="space-y-4">
                 <div>
                   <label className="text-white/90 text-sm font-medium block mb-2">
-                    Nama Kamu
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Masukkan nama kamu..."
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    className="bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-pink-400 focus:ring-pink-400/50"
-                    maxLength={100}
-                  />
-                </div>
-                
-                <div>
-                  <label className="text-white/90 text-sm font-medium block mb-2">
                     Pesan Kamu
                   </label>
                   <Textarea
@@ -441,19 +425,13 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex justify-center pt-4">
                 <StoryButton 
                   onClick={handleSendToWhatsApp}
                   className="flex-1 flex items-center justify-center gap-2"
                 >
                   <Send className="w-5 h-5" />
                   Kirim ke WhatsApp
-                </StoryButton>
-                <StoryButton 
-                  variant="secondary"
-                  onClick={restart}
-                >
-                  Ulang
                 </StoryButton>
               </div>
             </div>
