@@ -8,48 +8,6 @@ import { Heart, Send } from "lucide-react";
 import bgHero from "@/assets/bg-hero.jpg";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-
-import React, { useEffect, useRef } from "react";
-
-const AutoPlayAudio: React.FC = () => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const playAudio = async () => {
-        try {
-          await audio.play();
-          console.log("Audio started automatically 🎵");
-        } catch (err) {
-          console.warn("Autoplay blocked, waiting for user interaction.");
-        }
-      };
-      playAudio();
-    }
-  }, []);
-
-  const handleManualPlay = () => {
-    audioRef.current?.play();
-  };
-
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
-      <h1 className="text-2xl font-bold mb-4">Pemutar Audio Otomatis</h1>
-      <audio ref={audioRef} src="https://files.catbox.moe/r34k5f.mp3" loop />
-      <button
-        onClick={handleManualPlay}
-        className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg"
-      >
-        Putar Manual
-      </button>
-    </div>
-  );
-};
-
-export default AutoPlayAudio;
-
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState(0);
