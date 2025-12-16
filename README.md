@@ -32,7 +32,7 @@ An interactive romantic confession website built with modern web technologies. S
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/fareldev-hub/eternal-confess
 cd eternal-confess
 
 # Install dependencies
