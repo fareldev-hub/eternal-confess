@@ -1,73 +1,158 @@
-# Welcome to your Lovable project
 
-## Project info
+# Eternal Confess 💕
 
-**URL**: https://lovable.dev/projects/4542f2f3-738b-41aa-a5c6-ad0ad860b572
+An interactive romantic confession website built with modern web technologies. Share your feelings through an engaging 13-page love story journey with beautiful animations, music, and WhatsApp integration.
 
-## How can I edit this code?
+![Eternal Confess](https://img.shields.io/badge/status-active-pink?style=for-the-badge)
+![React](https://img.shields.io/badge/React-18.3.1-blue?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue?style=flat-square&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5.4.19-purple?style=flat-square&logo=vite)
 
-There are several ways of editing your application.
+## ✨ Features
 
-**Use Lovable**
+- **🎵 Interactive Love Story**: 13 engaging pages with romantic messaging and animations
+- **🎨 Beautiful UI**: Stunning gradient backgrounds, floating hearts, and smooth animations
+- **⌨️ Typing Effects**: Dynamic text animations that bring the confession to life
+- **🎶 Background Music**: Integrated audio player with romantic background music
+- **📱 WhatsApp Integration**: Send responses directly to WhatsApp
+- **💝 Love Meter**: Interactive slider to express level of affection
+- **🎭 Interactive Choices**: Meaningful dialogue choices that affect the story flow
+- **📝 Personal Messages**: Custom message input for personal confessions
+- **💻 Responsive Design**: Works perfectly on all devices
+- **🌙 Dark Theme**: Elegant dark theme with romantic color schemes
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4542f2f3-738b-41aa-a5c6-ad0ad860b572) and start prompting.
+## 🚀 Quick Start
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js (v18 or higher)
+- npm or yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation & Development
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# Clone the repository
+git clone <repository-url>
+cd eternal-confess
 
-Follow these steps:
+# Install dependencies
+npm install
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Visit `http://localhost:5173` to see your confession website!
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build for Production
 
-**Use GitHub Codespaces**
+```bash
+# Build the project
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Preview production build
+npm run preview
+```
 
-## What technologies are used for this project?
+## 🛠️ Technologies Used
 
-This project is built with:
+This project is built with modern web technologies:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **⚡ Vite** - Lightning-fast build tool and development server
+- **⚛️ React 18** - Modern frontend framework with hooks
+- **📘 TypeScript** - Type-safe development
+- **🎨 Tailwind CSS** - Utility-first CSS framework
+- **🧩 shadcn/ui** - Beautiful and accessible UI components
+- **🎭 Radix UI** - Low-level UI primitives
+- **🎵 Lucide React** - Beautiful icons
+- **📱 React Router** - Client-side routing
+- **🔄 TanStack Query** - Data fetching and state management
+- **🎉 Sonner** - Elegant toast notifications
+- **💅 Tailwind Animate** - Smooth CSS animations
 
-## How can I deploy this project?
+## 📁 Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/4542f2f3-738b-41aa-a5c6-ad0ad860b572) and click on Share -> Publish.
+```
+src/
+├── components/           # Reusable React components
+│   ├── ui/              # shadcn/ui components
+│   ├── AnimatedText.tsx # Typing animation component
+│   ├── FloatingHearts.tsx # Floating hearts animation
+│   ├── LoveSlider.tsx   # Interactive love meter
+│   ├── StoryButton.tsx  # Custom story buttons
+│   ├── StoryCard.tsx    # Main story container
+│   └── TypingText.tsx   # Text typing effects
+├── pages/               # Page components
+│   ├── Index.tsx        # Main confession flow
+│   └── NotFound.tsx     # 404 page
+├── hooks/               # Custom React hooks
+├── lib/                 # Utility functions
+└── assets/              # Static assets
+    └── bg-hero.jpg      # Hero background image
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 🎭 How It Works
 
-Yes, you can!
+The confession website follows a beautiful 13-page journey:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. **Welcome** - Initial greeting and consent
+2. **Checking In** - Asking about the person's day
+3. **Acknowledgment** - Responding to their answer
+4. **Importance** - Asking if they're important to you
+5. **Reciprocity** - Expressing mutual importance
+6. **Affection** - Asking if they care about you
+7. **Love Meter** - Interactive slider for expressing love level
+8. **Gratitude** - Thanking them for their honesty
+9. **Unlimited Love** - Expressing unlimited affection
+10. **Preparation** - Preparing to share something special
+11. **Love Declaration** - Animated confession of love
+12. **Gratitude** - Thanking for their time and responses
+13. **Personal Message** - Form to send personal message via WhatsApp
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🌐 Deployment
+
+Deploy this romantic confession website to any static hosting service:
+
+- **🚀 Vercel** - Zero-config deployment
+- **🌊 Netlify** - Easy drag-and-drop deployment
+- **📄 GitHub Pages** - Free hosting for public repos
+- **☁️ Any Static Host** - Works with any CDN or hosting provider
+
+Simply run `npm run build` and deploy the `dist` folder!
+
+## 💝 Features in Detail
+
+### 🎵 Audio Integration
+- Background music starts when user begins the journey
+- Seamless audio playback with user interaction handling
+- Audio can be restarted with the confession flow
+
+### 📱 WhatsApp Integration
+- Automatically formats responses into a beautiful message
+- Direct link to WhatsApp with pre-filled message
+- Includes all user choices and love percentage
+
+### 🎨 Visual Effects
+- Beautiful gradient backgrounds with romantic colors
+- Floating heart animations
+- Smooth page transitions
+- Typing text effects
+- Responsive design for all screen sizes
+
+### 💌 Personalization
+- Tracks user responses throughout the journey
+- Displays summary of all answers before sending
+- Custom message input for personal touch
+- Mobile-optimized interface
+
+## 👨‍💻 Developer
+
+Created with ❤️ by **Farel Alfareza**
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**💕 Spread love, one confession at a time! 💕**
